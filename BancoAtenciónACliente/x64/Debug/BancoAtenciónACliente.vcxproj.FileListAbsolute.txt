@@ -1,1 +1,2 @@
 C:\proyectos_agoritmo\BancoAtenciónACliente\x64\Debug\BancoAtenciónACliente.exe
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\x64\Debug\BancoAtenciónACliente.exe

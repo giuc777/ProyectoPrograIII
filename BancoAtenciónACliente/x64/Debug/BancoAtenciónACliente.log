@@ -1,8 +1,8 @@
 ﻿  BancoAtenciónACliente.cpp
-C:\proyectos_agoritmo\BancoAtenciónACliente\template.h(5,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\proyectos_agoritmo\BancoAtenciónACliente\template.h(6,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\proyectos_agoritmo\BancoAtenciónACliente\template.h(7,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\proyectos_agoritmo\BancoAtenciónACliente\template.h(8,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\proyectos_agoritmo\BancoAtenciónACliente\template.h(9,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\proyectos_agoritmo\BancoAtenciónACliente\template.h(10,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-  BancoAtenciónACliente.vcxproj -> C:\proyectos_agoritmo\BancoAtenciónACliente\x64\Debug\BancoAtenciónACliente.exe
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(5,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(6,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(7,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(8,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(9,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(10,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+  BancoAtenciónACliente.vcxproj -> C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\x64\Debug\BancoAtenciónACliente.exe
