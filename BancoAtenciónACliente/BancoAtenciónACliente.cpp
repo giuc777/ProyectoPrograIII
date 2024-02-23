@@ -2,11 +2,22 @@
 #include <iostream>
 #include "template.h"
 
+
 struct Clientes {
     int id;
-    string nombre;
-    int edad;
+    string nombre; //P y A
+    string apellido; //P y A
+    string DPI;//P y A
+    string Telefono; //P y A
+    int edad; // P y A
+    char sexo;//A
+    string fechaNacimiento;// A
+    int numeroNis;//P y A
+    int cantidad;//P y A
+    //Para prestamos
+    int ingresoBase;
 };
+
 
 struct nodo {
     Clientes cliente;
@@ -135,8 +146,8 @@ int menu() {
     LimpiarPatalla();
     int opcion;
     cout << "\n\tMENU" << endl;
-    cout << "1. Operaciones por Pila" << endl;
-    cout << "2. Operaciones por Cola" << endl;
+    cout << "1. Modulo de datos de apertura de cuenta (Pila)" << endl;
+    cout << "2. Modulo de datos de prestamos (Cola)" << endl;
     cout << "Ingrese una opcion: ";
     cin >> opcion;
     return opcion;
@@ -149,6 +160,7 @@ string convertiraMayuscula(string nombre) {
     }
     return nombre;
 }
+
 void pop(nodo*& inicio, int* id, bool esCola) {
     LimpiarPatalla();
     if (inicio != NULL) { // Si la pila no está vacía
@@ -227,16 +239,17 @@ void buscarDatoPila(nodo *&inicio, int* id) {
     _getch();
 }
 
-void pushCola(nodo*& primero, nodo*& ultimo, int* id) {
+void pushCola(nodo*& primero, nodo*& ultimo, int* id) { //esto es para el prestamo
     LimpiarPatalla();
     (*id)++;
     string nombre;
     int edad;
     cout << "Ingrese nombre de cliente \n";
     cin >> nombre;
-    for (int i = 0; i < nombre.size(); i++) {
-        nombre[i] = toupper(nombre[i]);
-    }
+    nombre = convertiraMayuscula(nombre);
+    //El apellido
+    //IngresoMensual
+    //
     cout << "Ingrese edad de cliente \n";
     cin >> edad;
     nodo* nuevo_nodo = new nodo();
@@ -261,19 +274,20 @@ void pushCola(nodo*& primero, nodo*& ultimo, int* id) {
 
 }
 
-void push(nodo*& pila, int* id) {
+void push(nodo*& pila, int* id) { //esto es para la apertura
     LimpiarPatalla();
     (*id)++;
     string nombre;
+    //sexo
+    //otras
     int edad;
     cout << "Ingrese nombre de cliente \n";
     cin >> nombre;
-    for (int i = 0; i < nombre.size(); i++) {
-        nombre[i] = toupper(nombre[i]);
-    }
+    nombre = convertiraMayuscula(nombre);
     cout << "Ingrese edad de cliente \n";
     cin >> edad;
     nodo* nuevo_nodo = new nodo();
+    //nuevo_nodo->cliente.sexo = sexo
     nuevo_nodo->cliente.nombre = nombre;
     nuevo_nodo->cliente.edad = edad;
     nuevo_nodo->cliente.id = *id;
@@ -295,10 +309,11 @@ void Recorer(nodo*& inicio, int* id, bool esCola) {
 
     while (aux != NULL) { // Mientras no sea el final de la pila
         cout << aux->cliente.nombre << " "<<aux->cliente.edad<<" id: "<<aux->cliente.id; // Imprimimos el dato
-        if (esCola) {
+        if (esCola) { //Imprimir los datos del prestamo
             cout << " sguiente en cola-> ";
+            //los datos para la cola
         }
-        else {
+        else { //Imprimir los datos de Apertura
             cout << endl;
         }
         aux = aux->siguiente; // Avanzamos a la siguiente posición
