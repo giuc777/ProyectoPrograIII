@@ -24,4 +24,9 @@ void gotoxy(int x, int y)
 void LimpiarPatalla() {
     system("cls");
 }
+
+void haciaAbajo(int constante, int* aumento) {
+    *aumento++;
+    return gotoxy(constante, *aumento);
+}
 #endif // !1
