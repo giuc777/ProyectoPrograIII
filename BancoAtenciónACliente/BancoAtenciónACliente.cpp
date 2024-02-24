@@ -5,7 +5,7 @@
 
 struct Clientes {
     int id;
-    string nombre; //P y A
+    string nombre; //Prestamos y Apertura
     string apellido; //P y A
     string DPI;//P y A
     string Telefono; //P y A
@@ -56,21 +56,23 @@ int main()
         case 2:
             operacionesCola(primero, ultimo);
             break;
+        case3:
+            break;
         default:
             cout << "Opción no válida." << endl;
         }
-    } while (opcion != 6);
+    } while (opcion != 3);
 
     
 }
 
 void imprimirEncabezado() {
     
-    gotoxy(20, 7);std::cout << "  BBBBBB  AAAAAA  NNN   N  CCCCCC  OOOOO  \n";
-    gotoxy(20, 8);std::cout << "  B     B A     A N   N N C       O    O \n";
-    gotoxy(20, 9); std::cout << "  BBBBBB  AAAAAA  N    NN C       O    O \n";
-    gotoxy(20, 10);std::cout << "  B     B A     A N    NN C       O    O \n";
-    gotoxy(20, 11);std::cout << "  BBBBBB  A     A N    NN  CCCCCC  OOOOO \n";
+    gotoxy(20, 7);std::cout << "  BBBBBB  AAAAAA  NNN   N  CCCCCC  OOOOO ";
+    gotoxy(20, 8);std::cout << "  B     B A     A N   N N C       O    O ";
+    gotoxy(20, 9); std::cout << "  BBBBBB  AAAAAA  N    NN C       O    O ";
+    gotoxy(20, 10);std::cout << "  B     B A     A N    NN C       O    O ";
+    gotoxy(20, 11);std::cout << "  BBBBBB  A     A N    NN  CCCCCC  OOOOO ";
     _getch();
 }
 void operacionesPila(nodo * pila) {
@@ -226,16 +228,21 @@ string convertiraMayuscula(string nombre) {
 
 void pop(nodo*& inicio, int* id, bool esCola) {
     LimpiarPatalla();
-    if (inicio != NULL) { // Si la pila no está vacía
+    if (inicio != NULL) { // Si la pila o la cola no está vacía
         if (!esCola) {
             (*id)--;
         }
         nodo* aux = inicio; // Creamos nodo auxiliar y le asignamos la pila
-        inicio = aux->siguiente; // Movemos el inicio de la pila al siguiente nodo
+        inicio = aux->siguiente; // Movemos el inicio al siguiente nodo
         delete aux; // Eliminamos el nodo auxiliar (el antiguo inicio de la pila)
     }
     else {
-        cout << "La pila está vacía." << endl;
+        if (esCola) {
+            cout << "La cola está vacía." << endl;
+        }
+        else {
+            cout << "La pila está vacía." << endl;
+        }
     }
 
 }
