@@ -248,28 +248,68 @@ void eliminarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id)
         cin >> idEliminar;
         NodoListaCircular* temp = cab;
         NodoListaCircular* prev = NULL;
-        while (temp->Cliente.idRemesa != idEliminar) {
-
-        }
-       
+        do {
+            if (temp->Cliente.idRemesa == idEliminar) {
+                if (prev == NULL) { // Eliminar el primer nodo
+                    if (cab == fin) { // Si solo hay un nodo en la lista
+                        cab = NULL;
+                        fin = NULL;
+                    }
+                    else {
+                        cab = cab->sig;
+                        fin->sig = cab;
+                    }
+                }
+                else { // Eliminar un nodo que no es el primero
+                    prev->sig = temp->sig;
+                    if (temp == fin) { // Si el nodo a eliminar es el último
+                        fin = prev;
+                    }
+                }
+                delete temp;
+                return;
+            }
+            prev = temp;
+            temp = temp->sig;
+        } while (temp != cab);
+        cout << "El id de la remesa " << idEliminar << " no se encontró en la lista.\n";
     }
     else {
         cout << "No hay remesas";
+
     }
-};
+    _getch();
+}
+
 
 void vaciarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id) {
+    NodoListaCircular* temp = cab;
+    while (cab != fin) {
+        cab = cab->sig;
+        delete temp;
+        temp = cab;
+    }
+    if (fin != nullptr) {
+        delete fin;
+    }
+    cab = nullptr;
+    fin = nullptr;
+}
 
-};
 void MostrarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id) {
     LimpiarPatalla();
     NodoListaCircular* actual = new NodoListaCircular;
     actual = cab;
 
-    do{
-        cout << "Con la cantidad " <<actual->Cliente.cantidad<<" " << &actual->Cliente << actual->Cliente.cantidad << " ->  siguiente " << actual->sig << " ";
-        actual = actual->sig;
-    } while (actual != cab);
+    if (cab != NULL) {
+        do {
+            cout << "Con la cantidad " << actual->Cliente.cantidad << " " << &actual->Cliente << actual->Cliente.cantidad << " ->  siguiente " << actual->sig << " ";
+            actual = actual->sig;
+        } while (actual != cab);
+    }
+    else {
+        cout << "No hay registros";
+    }
     _getch();
 };
 

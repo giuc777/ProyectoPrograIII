@@ -30,6 +30,11 @@ struct ClientesRemesas {
     string DPI, nombre, apellido, paisOrigen, fecha;
 };
 
+struct ClientesDepositos {
+    int cant, idDeposito;
+    string nombre, apellido;
+};
+
 struct nodo {
     Clientes cliente;
     nodo* siguiente;
@@ -43,6 +48,12 @@ struct NodoListaSimple {
 struct NodoListaCircular {
     ClientesRemesas Cliente;
     NodoListaCircular* sig;
+};
+
+struct NodoListaDoblemente {
+    ClientesDepositos Cliente;
+    NodoListaDoblemente* sig;
+    NodoListaDoblemente* ant;
 };
 
 #endif

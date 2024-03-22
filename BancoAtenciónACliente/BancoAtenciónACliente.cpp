@@ -33,6 +33,8 @@ void insertarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id)
 void eliminarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id);
 void vaciarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id);
 void MostrarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id);
+//Doblemente
+
 
 int main()
 {
@@ -62,7 +64,7 @@ int main()
         default:
             cout << "Opción no válida." << endl;
         }
-    } while (opcion != 4);
+    } while (opcion != 5);
 
 
 }
@@ -258,7 +260,7 @@ int Menu() {
         gotoxy(20, 4); cout << ((opcionMenuPrincipal == 2) ? "*  -> Modulo de datos de creditos (COLA)    " : "     Modulo de datos de (COLA)    *");
         gotoxy(20, 5); cout << ((opcionMenuPrincipal == 3) ? "*  -> Modulo de datos de transferecias (LISTA SIMPLE)     " : "     Modulo de datos de (LISTA SIMPLE) *"); // Añade la nueva opción
         gotoxy(20, 6); cout << ((opcionMenuPrincipal == 4) ? "*  -> Modulo de datos de remesas (LISTA CIRCULAR)     " : "     Modulo de datos de (LISTA CIRCULAR) *"); // Añade la nueva opción
-        gotoxy(20, 7); cout << ((opcionMenuPrincipal == 5) ? "*  -> Modulo de datos de transferecias (LISTA SIMPLE)     " : "     Modulo de datos de (LISTA SIMPLE) *"); // Añade la nueva opción
+        gotoxy(20, 7); cout << ((opcionMenuPrincipal == 5) ? "*  -> Modulo de datos de deposito (LISTA DOBLEMENTE ENLAZADA)     " : "     Modulo de datos de (LISTA DOBLEMENTE ENLAZADA) *"); // Añade la nueva opción
         gotoxy(20, 8); cout << ((opcionMenuPrincipal == 6) ? "*  -> Salida                           " : "     Salida                      *"); // Cambia la posición de "Salida"
         gotoxy(20, 9); cout << ("****************************************");
 
