@@ -5,6 +5,6 @@ C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.
 C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(8,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(9,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
 C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\template.h(10,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\BancoAtenciónACliente.cpp(59,9): warning C4102: 'case3': etiqueta sin referencia
-C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\BancoAtenciónACliente.cpp(274,17): warning C4101: 'nuevoValorInt': variable local sin referencia
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\FuncionesListas.h(49,9): warning C4101: 'idCliente': variable local sin referencia
+C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\BancoAtenciónACliente.cpp(472,17): warning C4101: 'nuevoValorInt': variable local sin referencia
   BancoAtenciónACliente.vcxproj -> C:\proyectos_agoritmo\Proyect\ProyectoPrograIII\BancoAtenciónACliente\x64\Debug\BancoAtenciónACliente.exe
