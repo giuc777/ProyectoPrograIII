@@ -2,7 +2,7 @@
 #include "Nodos.h"
 #include "template.h"
 #include "FuncionesListas.h"
-
+#include"FuncionesArboles.h"
 
 
 void operacionesPila(nodo* pila);
@@ -35,12 +35,41 @@ void vaciarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id);
 void MostrarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id);
 //Doblemente
 
+int menuListaDoblemente();
+void operacionesListaDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin);
+void insertarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int* id);
+void eliminarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int* id);
+void vaciarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int* id);
+void MostrarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int* id);
+
+//Arboles
+void operacionesABB(NodoABB *&);
+int menuABB();
+NodoABB* crearNodo(int cant, string nombre, string cuenta, string fecha, string DPI, string apellido, NodoABB* );
+void insertarABB(NodoABB *&, int cantidad, string nombre, string cuenta, string fecha, string DPI, string apellido, NodoABB* padre);
+void AgregarNodoABB(NodoABB*& arbol);
+void mostrarABB(NodoABB*arbol, int cont, int vert, bool);
+bool busquedaABB(NodoABB*, int cant, NodoABB**);
+void resulBusqABB(NodoABB*);
+int menuOrden();
+void ordenABB(NodoABB*);
+void preOrdenABB(NodoABB*);
+void inOrdenABB(NodoABB*);
+void postOrdenABB(NodoABB*);
+void destruirNodoABB(NodoABB*);
+void reemplazarNodoABB(NodoABB*, NodoABB*);
+NodoABB* NodominimoABB(NodoABB*);
+void eliminarNodoABB(NodoABB*);
+void eliminarABB(NodoABB*, int dato);
+
 
 int main()
 {
     nodo* pila = NULL, * primero = NULL, * ultimo = NULL;
     NodoListaSimple* cab = NULL, * fin = NULL;
     NodoListaCircular* cabCircular = NULL, * finCircular = NULL;
+    NodoListaDoblemente* cabDoblemente = NULL, * finDoblemente = NULL;
+    NodoABB* arbol = NULL;
     imprimirEncabezado();
 
     int opcion, id = 0;
@@ -61,6 +90,11 @@ int main()
             break;
         case 4:
             operacionesListaCircular(cabCircular, finCircular);
+            break;
+        case 5:
+            operacionesListaDoblemente(cabDoblemente, finDoblemente);
+        case 6:
+            operacionesABB(arbol);
         default:
             cout << "Opción no válida." << endl;
         }
@@ -133,7 +167,7 @@ void operacionesListaSimple(NodoListaSimple*& cab, NodoListaSimple*& fin) {
         case 4:
             vaciarSimple(cab, fin, &id);
             break;
-        
+
         default:
             cout << "Opción no válida." << endl;
         }
@@ -165,7 +199,37 @@ void operacionesListaCircular(NodoListaCircular*& cab, NodoListaCircular*& fin) 
             break;
 
         default:
-            cout << "Opción no válida." << endl;
+            cout << "Opcion no valida." << endl;
+        }
+    } while (operation != 5);
+
+};
+
+void operacionesListaDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin) {
+    int operation;
+    int id = 0;
+
+    do {
+        operation = menuListaDoblemente();
+
+        switch (operation) {
+        case 1:
+
+            insertarDoblemente(cab, fin, &id);
+            break;
+            // Aquí puedes agregar más casos para más opciones
+        case 2:
+            MostrarDoblemente(cab, fin, &id);
+            break;
+        case 3:
+            eliminarDoblemente(cab, fin, &id);
+            break;
+        case 4:
+            vaciarDoblemente(cab, fin, &id);
+            break;
+
+        default:
+            cout << "Opcion no valida." << endl;
         }
     } while (operation != 5);
 
@@ -197,7 +261,7 @@ void operacionesCola(nodo* primero, nodo* ultimo) {
             break;
         case 5:
             ModificarDato(primero, &id, cola);
-            
+
             break;
         default:
             cout << "Opción no válida." << endl;
@@ -205,43 +269,83 @@ void operacionesCola(nodo* primero, nodo* ultimo) {
     } while (operation != 6);
 };
 
+void operacionesABB(NodoABB *&Arbol) {
+    int operation;
+    int cont = 38;
+    int vert = 1;
+    int eliminar;
+    bool primera = true;
+
+    do {
+        LimpiarPatalla();
+        operation = menuABB();
+
+        switch (operation) {
+       
+        case 1:
+            AgregarNodoABB(Arbol);
+            break;
+        case 2:
+            LimpiarPatalla();
+            mostrarABB(Arbol, cont, vert, primera);
+            _getch();
+            break;
+        case 3:
+            LimpiarPatalla();
+            gotoxy(20, 2);cout << "Ingrese dato a eliminar";
+            gotoxy(20, 3);cin>>eliminar;
+            eliminarABB(Arbol, eliminar);
+            gotoxy(20, 5);cout<<"Eliminando...";
+            _getch();
+            break;
+;        case 5:
+            ordenABB(Arbol);
+            break;
+        case 4:
+            resulBusqABB(Arbol);
+            break;
+        default:
+            cout << "Opción no válida." << endl;
+        }
+    } while (operation != 6);
+};
 
 int submenu() {
     LimpiarPatalla();
     int opcionSubmenu = 1;
     int maxOpcion = 6;
     char tecla;
-   
-    
+
+
     system("color F0");
-    do{
-    gotoxy(20, 2); cout << ("********************MENU******************");
-    gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Agregar cliente" : "Agregar cliente*");
-    gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> Mostrar cliente" : "mostrar cliente*");
-    gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> quitar cliente" : "quitar cliente*");
-    gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> Buscar cliente" : "Buscar cliente*");
-    gotoxy(20, 7); cout << ((opcionSubmenu == 5) ? "*-> modificar cliente" : "modificar cliente*");
-    gotoxy(20, 8); cout << ((opcionSubmenu == 6) ? "*-> atras" : " atras*");
-    gotoxy(20, 9); cout << ("*********************************************");
+    do {
+        gotoxy(20, 2); cout << ("********************MENU******************");
+        gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Agregar cliente" : "Agregar cliente*");
+        gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> Mostrar cliente" : "mostrar cliente*");
+        gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> quitar cliente" : "quitar cliente*");
+        gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> Buscar cliente" : "Buscar cliente*");
+        gotoxy(20, 7); cout << ((opcionSubmenu == 5) ? "*-> modificar cliente" : "modificar cliente*");
+        gotoxy(20, 8); cout << ((opcionSubmenu == 6) ? "*-> atras" : " atras*");
+        gotoxy(20, 9); cout << ("*********************************************");
 
-    tecla = _getch();
+        tecla = _getch();
 
-    switch (tecla) {
-    case 73: // Flecha arriba
-        opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
-        break;
+        switch (tecla) {
+        case 73: // Flecha arriba
+            opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
+            break;
 
-    case 80: // Flecha abajo
-        opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 :1;
-        break;
+        case 80: // Flecha abajo
+            opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 : 1;
+            break;
 
-    case 13: // Enter
-        break;
-    }
+        case 13: // Enter
+            break;
+        }
 
-} while (tecla != 13);
+    } while (tecla != 13);
 
-return opcionSubmenu;
+    return opcionSubmenu;
 }
 
 
@@ -249,7 +353,7 @@ return opcionSubmenu;
 
 int Menu() {
     int opcionMenuPrincipal = 1;
-    int maxOpciones = 6; // Incrementa el número de opciones
+    int maxOpciones = 7; // Incrementa el número de opciones
     char tecla;
 
     do {
@@ -260,9 +364,10 @@ int Menu() {
         gotoxy(20, 4); cout << ((opcionMenuPrincipal == 2) ? "*  -> Modulo de datos de creditos (COLA)    " : "     Modulo de datos de (COLA)    *");
         gotoxy(20, 5); cout << ((opcionMenuPrincipal == 3) ? "*  -> Modulo de datos de transferecias (LISTA SIMPLE)     " : "     Modulo de datos de (LISTA SIMPLE) *"); // Añade la nueva opción
         gotoxy(20, 6); cout << ((opcionMenuPrincipal == 4) ? "*  -> Modulo de datos de remesas (LISTA CIRCULAR)     " : "     Modulo de datos de (LISTA CIRCULAR) *"); // Añade la nueva opción
-        gotoxy(20, 7); cout << ((opcionMenuPrincipal == 5) ? "*  -> Modulo de datos de deposito (LISTA DOBLEMENTE ENLAZADA)     " : "     Modulo de datos de (LISTA DOBLEMENTE ENLAZADA) *"); // Añade la nueva opción
-        gotoxy(20, 8); cout << ((opcionMenuPrincipal == 6) ? "*  -> Salida                           " : "     Salida                      *"); // Cambia la posición de "Salida"
-        gotoxy(20, 9); cout << ("****************************************");
+        gotoxy(20, 7); cout << ((opcionMenuPrincipal == 5) ? "*  -> Modulo de datos de deposito (LISTA DOBLEMENTE)     " : "     Modulo de datos de (LISTA DOBLEMENTE ENLAZADA) *"); // Añade la nueva opción
+        gotoxy(20, 8); cout << ((opcionMenuPrincipal == 6) ? "*  -> Modulo de datos de retiros (ABB)     " : "     Modulo de datos de (ABB) *"); // Añade la nueva opción
+        gotoxy(20, 9); cout << ((opcionMenuPrincipal == 7) ? "*  -> Salida                           " : "     Salida                      *"); // Cambia la posición de "Salida"
+        gotoxy(20, 10); cout << ("****************************************");
 
         tecla = _getch();
 
@@ -372,7 +477,7 @@ int menuModificar(bool esCola) {
     }
 
 }
-    
+
 
 
 
@@ -864,4 +969,3 @@ void Recorer(nodo*& inicio, int* id, bool esCola) {
     _getch();
 }
 //P = nombre, apellido, DPI, Telefono, edad, numeroNis, cantidad, ingresos
-

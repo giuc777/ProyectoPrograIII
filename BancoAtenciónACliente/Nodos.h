@@ -24,6 +24,10 @@ struct ClientesTrasnferencias {
     int idTrans, cantidad;
     string cuenta1, cuenta2, fecha, DPI;
 };
+struct ClientesRetiro {
+    int cantidad;
+    string nombre,apellido, cuenta, fecha, DPI;
+};
 
 struct ClientesRemesas {
     int idRemesa, cantidad;
@@ -32,7 +36,7 @@ struct ClientesRemesas {
 
 struct ClientesDepositos {
     int cant, idDeposito;
-    string nombre, apellido;
+    string nombre, apellido, fecha, dpi;
 };
 
 struct nodo {
@@ -54,6 +58,13 @@ struct NodoListaDoblemente {
     ClientesDepositos Cliente;
     NodoListaDoblemente* sig;
     NodoListaDoblemente* ant;
+};
+
+struct NodoABB {
+    ClientesRetiro Cliente;
+    NodoABB* i;
+    NodoABB* d;
+    NodoABB* padre;
 };
 
 #endif

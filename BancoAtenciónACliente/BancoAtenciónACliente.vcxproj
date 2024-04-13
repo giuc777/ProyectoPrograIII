@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cola.h" />
+    <ClInclude Include="FuncionesArboles.h" />
     <ClInclude Include="FuncionesListas.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="Nodos.h" />
