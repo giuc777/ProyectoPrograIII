@@ -3,6 +3,7 @@
 #include "template.h"
 #include "FuncionesListas.h"
 #include"FuncionesArboles.h"
+#include "AVLFUNCIONES.h"
 
 
 void operacionesPila(nodo* pila);
@@ -45,13 +46,14 @@ void MostrarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int
 //Arboles
 void operacionesABB(NodoABB *&);
 int menuABB();
+int menuOrden();
 NodoABB* crearNodo(int cant, string nombre, string cuenta, string fecha, string DPI, string apellido, NodoABB* );
 void insertarABB(NodoABB *&, int cantidad, string nombre, string cuenta, string fecha, string DPI, string apellido, NodoABB* padre);
 void AgregarNodoABB(NodoABB*& arbol);
 void mostrarABB(NodoABB*arbol, int cont, int vert, bool);
 bool busquedaABB(NodoABB*, int cant, NodoABB**);
 void resulBusqABB(NodoABB*);
-int menuOrden();
+
 void ordenABB(NodoABB*);
 void preOrdenABB(NodoABB*);
 void inOrdenABB(NodoABB*);
@@ -62,6 +64,24 @@ NodoABB* NodominimoABB(NodoABB*);
 void eliminarNodoABB(NodoABB*);
 void eliminarABB(NodoABB*, int dato);
 
+//Arboles AVL
+int menuAVL();
+void operacioesAVL(NodoAVL*);
+NodoAVL* crearNodoAVL(string nombre, string apellido, string fecha, string dpi, int NoNis, int cantidad);
+int obtenerAltura(NodoAVL* nodo);
+int obtenerFactorBalance(NodoAVL* nodo);
+NodoAVL* rotacionDerecha(NodoAVL* y);
+NodoAVL* rotacionIzquierda(NodoAVL* x);
+NodoAVL* insertarAVL(NodoAVL* nodo, string nombre, string apellido, string fecha, string dpi, int NoNis, int cantidad);
+NodoAVL* obtenerNodoMinimo(NodoAVL* nodo);
+NodoAVL* eliminarAVL(NodoAVL* raiz, int dato);
+NodoAVL* buscarAVL(NodoAVL* raiz, int dato);
+void mostrarAVL(NodoAVL* nodo, int cont, int vert, bool primeraVez);
+void obtenerDatosAVL(NodoAVL*& arbol);
+void preOrdenAVL(NodoABB*);
+void inOrdenAVL(NodoABB*);
+void postOrdenAVL(NodoABB*);
+void ordenAVL(NodoAVL* arbol);
 
 int main()
 {
@@ -70,6 +90,8 @@ int main()
     NodoListaCircular* cabCircular = NULL, * finCircular = NULL;
     NodoListaDoblemente* cabDoblemente = NULL, * finDoblemente = NULL;
     NodoABB* arbol = NULL;
+    NodoAVL* raiz = nullptr;
+
     imprimirEncabezado();
 
     int opcion, id = 0;
@@ -93,12 +115,17 @@ int main()
             break;
         case 5:
             operacionesListaDoblemente(cabDoblemente, finDoblemente);
+            break;
         case 6:
             operacionesABB(arbol);
+            break;
+        case 7:
+            operacioesAVL(raiz);
+            break;
         default:
             cout << "Opción no válida." << endl;
         }
-    } while (opcion != 5);
+    } while (opcion != 8);
 
 
 }
@@ -310,6 +337,57 @@ void operacionesABB(NodoABB *&Arbol) {
     } while (operation != 6);
 };
 
+void operacioesAVL(NodoAVL*raiz) {;
+    int cont = 38;
+    int vert = 1;;
+    bool primera = true;
+    int operation, valorb;
+  
+    NodoAVL* resultado = nullptr;
+ 
+    do {
+        LimpiarPatalla();
+        operation = menuAVL();
+
+        switch (operation) {
+
+        case 1:
+            LimpiarPatalla();
+            obtenerDatosAVL(raiz);
+            break;
+        case 2:
+            LimpiarPatalla();
+            mostrarAVL(raiz, cont, vert, primera);
+            _getch();
+            break;
+        case 3:
+            LimpiarPatalla();
+            cout << "Valor a eliminar: \n";
+            cin >> valorb;
+            eliminarAVL(raiz, valorb);
+            _getch();
+            
+            break;
+        case 4:
+            LimpiarPatalla();
+            cout << "Valor a buscar: \n";
+            cin >> valorb;
+            resultado = buscarAVL(raiz, valorb);
+            if (resultado != nullptr)
+                cout << "\nNodo " << resultado->cliente.cantidad << " encontrado en el árbol AVL." << endl;
+            else
+                cout << "\nNodo " << valorb << " no encontrado en el árbol AVL." << endl;
+            _getch();
+            break;
+        case 5:
+            ordenAVL(raiz);
+            break;
+        default:
+            cout << "Opción no válida." << endl;
+        }
+    } while (operation != 6);
+};
+
 int submenu() {
     LimpiarPatalla();
     int opcionSubmenu = 1;
@@ -353,7 +431,7 @@ int submenu() {
 
 int Menu() {
     int opcionMenuPrincipal = 1;
-    int maxOpciones = 7; // Incrementa el número de opciones
+    int maxOpciones = 8; // Incrementa el número de opciones
     char tecla;
 
     do {
@@ -366,8 +444,9 @@ int Menu() {
         gotoxy(20, 6); cout << ((opcionMenuPrincipal == 4) ? "*  -> Modulo de datos de remesas (LISTA CIRCULAR)     " : "     Modulo de datos de (LISTA CIRCULAR) *"); // Añade la nueva opción
         gotoxy(20, 7); cout << ((opcionMenuPrincipal == 5) ? "*  -> Modulo de datos de deposito (LISTA DOBLEMENTE)     " : "     Modulo de datos de (LISTA DOBLEMENTE ENLAZADA) *"); // Añade la nueva opción
         gotoxy(20, 8); cout << ((opcionMenuPrincipal == 6) ? "*  -> Modulo de datos de retiros (ABB)     " : "     Modulo de datos de (ABB) *"); // Añade la nueva opción
-        gotoxy(20, 9); cout << ((opcionMenuPrincipal == 7) ? "*  -> Salida                           " : "     Salida                      *"); // Cambia la posición de "Salida"
-        gotoxy(20, 10); cout << ("****************************************");
+        gotoxy(20, 9); cout << ((opcionMenuPrincipal == 7) ? "*  -> Modulo de datos de Pagos de Luz (AVL)     " : "     Modulo de datos de (AVL) *"); // Añade la nueva opción
+        gotoxy(20, 10); cout << ((opcionMenuPrincipal == 8) ? "*  -> Salida                           " : "     Salida                      *"); // Cambia la posición de "Salida"
+        gotoxy(20, 11); cout << ("****************************************");
 
         tecla = _getch();
 

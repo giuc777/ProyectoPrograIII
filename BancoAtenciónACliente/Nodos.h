@@ -39,6 +39,11 @@ struct ClientesDepositos {
     string nombre, apellido, fecha, dpi;
 };
 
+struct ClientesLuz {
+    string nombre, apellido, fecha, dpi;
+    int NoNis, cantidad;
+};
+
 struct nodo {
     Clientes cliente;
     nodo* siguiente;
@@ -65,6 +70,15 @@ struct NodoABB {
     NodoABB* i;
     NodoABB* d;
     NodoABB* padre;
+};
+
+struct NodoAVL {
+    ClientesLuz cliente;
+    NodoAVL* izquierdo;
+    NodoAVL* derecho;
+    int altura;
+
+   
 };
 
 #endif
