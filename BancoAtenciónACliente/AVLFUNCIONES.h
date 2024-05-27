@@ -4,40 +4,16 @@
 #include "Nodos.h"
 
 int menuAVL() {
-    LimpiarPatalla();
     int opcionSubmenu = 1;
-    int maxOpcion = 6;
-    char tecla;
+    const int OPCIONES = 7;
+
+    int x = 22;
+    int y = 5;
+    int colorS = FOREGROUND_GREEN | 0; // Texto verde sobre fondo negr
 
 
-    system("color F0");
-    do {
-        gotoxy(20, 2); cout << ("********************MENU******************");
-        gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Nuevo pago de luz" : "  Nuevo pago de luz*  ");
-        gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> Mostrar pagos de luz" : "  Mostrar pago de luz*  ");
-        gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> Quitar pagos" : "  Quitar pago *  ");
-        gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> Buscar pago " : "  Buscar pago*  ");
-        gotoxy(20, 7); cout << ((opcionSubmenu == 5) ? "*-> Recorrer" : "  Recorrer*  ");
-        gotoxy(20, 8); cout << ((opcionSubmenu == 6) ? "*-> atras" : " atras*  ");
-        gotoxy(20, 9); cout << ("*********************************************");
-
-        tecla = _getch();
-
-        switch (tecla) {
-        case 73: // Flecha arriba
-            opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
-            break;
-
-        case 80: // Flecha abajo
-            opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 : 1;
-            break;
-
-        case 13: // Enter
-            break;
-        }
-
-    } while (tecla != 13);
-
+    string opciones[OPCIONES] = { "Nuevo pago de Luz","Mostrar pagos de Luz","Quitar pagos de Luz","Buscar pago de Luz","Recorrer","Modificar pago de Luz", "atras" };
+    opcionSubmenu = mostrarMenuInteractivo(opciones, OPCIONES, x, y, colorS);
     return opcionSubmenu;
 };
 
@@ -144,8 +120,7 @@ void obtenerDatosAVL(NodoAVL*& arbol) {
     gotoxy(constante, aumentar++); getline(cin, nombre);
     gotoxy(constante, aumentar++); cout << "Ingrese el apellido del cliente: ";
     gotoxy(constante, aumentar++); getline(cin, apellido);
-    gotoxy(constante, aumentar++); cout << "Ingrese la fecha: ";
-    gotoxy(constante, aumentar++); cin >> fecha;
+    fecha = obtenerFechaActual();
     gotoxy(constante, aumentar++); cout << "Ingrese el numero de NIS: ";
     gotoxy(constante, aumentar++); cin >> NoNis;
     arbol = insertarAVL(arbol, nombre, apellido, fecha, dpi, NoNis, cantidad);
@@ -347,4 +322,173 @@ void ordenAVL(NodoAVL* arbol) {
     } while (operation != 4);
 }
 
+bool buscarNodoAVL(NodoAVL* arbol, int cant, NodoAVL** aux) {
+    if (arbol == NULL) {
+        return false;
+    }
+    else if (arbol->cliente.cantidad == cant) {
+        *aux = arbol;
+        return true;
+    }
+    else if (cant < arbol->cliente.cantidad) {
+        return buscarNodoAVL(arbol->izquierdo, cant, aux);
+    }
+    else {
+        return buscarNodoAVL(arbol->derecho, cant, aux);
+    }
+};
 
+void busquedaAVl(NodoAVL *arbol) {
+    LimpiarPatalla();
+    int buscar;
+    gotoxy(20, 2);cout << "Ingrese la cantidad que busca: ";
+    gotoxy(20, 3);cin >> buscar;
+
+    NodoAVL* aux = NULL;
+
+    if (buscarNodoAVL(arbol, buscar, &aux)) {
+        gotoxy(20, 5);cout << "Se encontro la cantidad de " << buscar;
+        int constante = 20, aumentar = 7;
+        gotoxy(constante, aumentar++);cout << "Detalles: ";
+        gotoxy(constante, aumentar++);cout << "DPI: " << aux->cliente.dpi;
+        gotoxy(constante, aumentar++);cout << "Nombre: " << aux->cliente.nombre;
+        gotoxy(constante, aumentar++);cout << "Apellido: " << aux->cliente.apellido;
+        gotoxy(constante, aumentar++);cout << "Pago de Luz: " << aux->cliente.cantidad;
+        gotoxy(constante, aumentar++);cout << "Numero de NIS: " << aux->cliente.NoNis;
+        gotoxy(constante, aumentar++);cout << "Fecha: " << aux->cliente.fecha;
+
+    }
+    else {
+        gotoxy(20, 5);cout << "No se encontro " << buscar;
+    }
+
+    _getch();
+
+}
+
+NodoAVL* ReestructurarAVL(NodoAVL* nodo, string nombre, string apellido, string fecha, string dpi, int NoNis, int cantidad, int cantidadEliminar) {
+    insertarAVL(nodo, nombre, apellido, fecha, dpi, NoNis, cantidad);
+    eliminarAVL(nodo, cantidadEliminar);
+    NodoAVL* nuevo_nodo = NULL;
+    buscarNodoAVL(nodo, cantidad, &nuevo_nodo);
+    return nuevo_nodo;
+};
+
+int menuModificarAVL() {
+    int optionGeneral = 1;
+    system("color 2F");
+    const int OPCIONES = 6;
+    int colorFondo = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED; // Blanco sobre azul
+    int x = 45;
+    int y = 3;
+    string opciones[OPCIONES] = { "Modificar Nombre" , "Modificar Apellido ", "Modificar DPI ", "Modificar Monto Pago", "Modificar NIS ","Volver" };
+    optionGeneral = mostrarMenuInteractivoSinBorrar(opciones, OPCIONES, x, y, colorFondo);
+    return optionGeneral;
+}
+
+void modificarAVL(NodoAVL* arbol) {
+    LimpiarPatalla();
+    int constante = 5;
+    int aumentar = 4;
+    int optionUser;
+    string nuevoValorString;
+    int nuevoValorInt;
+    int buscar;
+    gotoxy(20, 2);cout << "Ingrese la cantidad a buscar: ";
+    gotoxy(20, 3);cin >> buscar;
+
+    NodoAVL* aux = NULL;
+
+    if (buscarNodoAVL(arbol, buscar, &aux)) {
+
+
+        NodoAVL* encontrado = aux;
+
+        do {
+            LimpiarPatalla();
+            gotoxy(20, 2);cout << "Cliente a modificar:  " << encontrado->cliente.dpi;
+
+            gotoxy(constante, aumentar++);cout << "Detalles";
+            gotoxy(constante, aumentar++);cout << "Nombre: " << encontrado->cliente.nombre;
+            gotoxy(constante, aumentar++);cout << "Apellido: " << encontrado->cliente.apellido;
+            gotoxy(constante, aumentar++);cout << "DPI: " << encontrado->cliente.dpi;
+            gotoxy(constante, aumentar++);cout << "Monto de Pago: " << encontrado->cliente.cantidad;
+            gotoxy(constante, aumentar++);cout << "Numero NIS: " << encontrado->cliente.NoNis;
+            gotoxy(constante, aumentar++);cout << "Fecha: " << encontrado->cliente.fecha;
+
+            optionUser = menuModificarABB();
+
+            switch (optionUser)
+            {
+            case 1:
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingrese el nuevo nombre: ";
+                getline(cin, nuevoValorString);
+                encontrado->cliente.nombre = nuevoValorString;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+            case 2: // Apellido
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingresa el nuevo apellido: ";
+                getline(cin, nuevoValorString);
+                encontrado->cliente.apellido = nuevoValorString;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+
+            case 3: // DPI
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingresa el nuevo DPI: ";
+                getline(cin, nuevoValorString);
+                encontrado->cliente.dpi = nuevoValorString;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+
+            case 4: // Teléfono
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingresa el nuevo monto pagado: ";
+                cin >> nuevoValorInt;
+                encontrado = ReestructurarAVL(arbol, encontrado->cliente.nombre, encontrado->cliente.apellido, encontrado->cliente.fecha, encontrado->cliente.dpi, encontrado->cliente.NoNis, nuevoValorInt, buscar);
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+
+            case 5: // Edad
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingresa el nuemero de NIS: ";
+                cin>> encontrado->cliente.NoNis;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+
+            default:
+                break;
+            }
+        } while (optionUser != 6);
+
+        if (buscar != aux->cliente.cantidad) {
+
+        }
+
+    }
+    else {
+        gotoxy(20, 5);cout << "No se encontro " << buscar;
+    }
+
+
+
+
+
+}

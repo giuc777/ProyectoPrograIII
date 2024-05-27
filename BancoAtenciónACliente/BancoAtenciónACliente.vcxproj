@@ -134,6 +134,7 @@
     <ClInclude Include="FuncionesArboles.h" />
     <ClInclude Include="FuncionesListas.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="menus.h" />
     <ClInclude Include="Nodos.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

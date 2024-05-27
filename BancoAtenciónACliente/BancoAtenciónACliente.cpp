@@ -4,8 +4,14 @@
 #include "FuncionesListas.h"
 #include"FuncionesArboles.h"
 #include "AVLFUNCIONES.h"
+#include "menus.h"
 
 
+void setColor(int color);
+void dibujarMarco(int x, int y, int ancho, int alto);
+void mostrarMenu(const std::string opciones[], int n, int seleccion, int x, int y);
+int mostrarMenuInteractivo(const std::string opciones[], int n, int x, int y, int colorFondo);
+string obtenerFechaActual();
 void operacionesPila(nodo* pila);
 void operacionesCola(nodo* cabecera, nodo* ultimo);
 void pop(nodo*& inicio, int* id, bool esCola);
@@ -13,8 +19,9 @@ void push(nodo*& pila, int* id);
 void pushCola(nodo*& primero, nodo*& ultimo, int* id);
 void imprimirClienteRecorrer(nodo*& nodo, bool esCola, int constante, int aumento, string encabezado);
 int Menu();
+int mostrarMenuInteractivoSinBorrar(const std::string opciones[], int n, int x, int y, int colorFondo);
 void imprimirEncabezado();
-int submenu();
+int submenu(bool);
 int menuModificar(bool esCola);
 void Recorer(nodo*& pila, int* id, bool esCola);
 void ModificarDato(nodo*& pila, int* id, bool esCola);
@@ -27,6 +34,8 @@ void insertarSimple(NodoListaSimple*& cab, NodoListaSimple*& fin, int* id);
 void eliminarSimple(NodoListaSimple*& cab, NodoListaSimple*& fin, int* id);
 void vaciarSimple(NodoListaSimple*& cab, NodoListaSimple*& fin, int* id);
 void MostrarLista(NodoListaSimple*& cab, NodoListaSimple*& fin, int* id);
+NodoListaSimple* buscarEnListaSimple(NodoListaSimple* inicio, int id);
+void ResultadoBusquedaSimple(NodoListaSimple* inicio);
 //Circular
 int menuListaCircular();
 void operacionesListaCircular(NodoListaCircular*& cab, NodoListaCircular*& fin);
@@ -34,6 +43,9 @@ void insertarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id)
 void eliminarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id);
 void vaciarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id);
 void MostrarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id);
+NodoListaCircular* buscarEnListaCircular(NodoListaCircular* inicio, int id);
+void ResultadoBusquedaCircular(NodoListaCircular* inicio);
+
 //Doblemente
 
 int menuListaDoblemente();
@@ -42,6 +54,9 @@ void insertarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, in
 void eliminarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int* id);
 void vaciarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int* id);
 void MostrarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int* id);
+NodoListaDoblemente* buscarEnListaDoblemente(NodoListaDoblemente* inicio, int id);
+void ResultadoBusquedaDoblemente(NodoListaDoblemente* inicio);
+
 
 //Arboles
 void operacionesABB(NodoABB *&);
@@ -53,7 +68,6 @@ void AgregarNodoABB(NodoABB*& arbol);
 void mostrarABB(NodoABB*arbol, int cont, int vert, bool);
 bool busquedaABB(NodoABB*, int cant, NodoABB**);
 void resulBusqABB(NodoABB*);
-
 void ordenABB(NodoABB*);
 void preOrdenABB(NodoABB*);
 void inOrdenABB(NodoABB*);
@@ -63,6 +77,10 @@ void reemplazarNodoABB(NodoABB*, NodoABB*);
 NodoABB* NodominimoABB(NodoABB*);
 void eliminarNodoABB(NodoABB*);
 void eliminarABB(NodoABB*, int dato);
+int menuModificarABB();
+NodoABB* ReestructurarABB(NodoABB* arbol, int cantidad, string nombre, string cuenta, string fecha, string dpi, string apellido, NodoABB* padre, int cantidadEliminar);
+void modificarABB(NodoABB* arbol);
+
 
 //Arboles AVL
 int menuAVL();
@@ -82,6 +100,11 @@ void preOrdenAVL(NodoABB*);
 void inOrdenAVL(NodoABB*);
 void postOrdenAVL(NodoABB*);
 void ordenAVL(NodoAVL* arbol);
+bool buscarNodoAVL(NodoAVL* arbol, int cant, NodoAVL** aux);
+void busquedaAVl(NodoAVL* arbol);
+int menuModificarAVL();
+NodoAVL* ReestructurarAVL(NodoAVL* nodo, string nombre, string apellido, string fecha, string dpi, int NoNis, int cantidad, int cantidadEliminar);
+void modificarAVL(NodoAVL* arbol);
 
 int main()
 {
@@ -131,22 +154,48 @@ int main()
 }
 
 void imprimirEncabezado() {
-    system("color A0");
+    // Cambiar temporalmente el color del texto a amarillo sobre un fondo oscuro
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 
-    gotoxy(20, 7); std::cout << "  BBBBBB  AAAAAA  NNN   N  CCCCCC  OOOOO ";
-    gotoxy(20, 8); std::cout << "  B     B A     A N   N N C       O    O ";
-    gotoxy(20, 9); std::cout << "  BBBBBB  AAAAAA  N    NN C       O    O ";
-    gotoxy(21, 10); std::cout << " B     B A     A N    NN C       O    O ";
-    gotoxy(21, 11); std::cout << " BBBBBB  A     A N    NN  CCCCCC  OOOOO ";
+    std::string text[] = {
+        " BBBBBB  AAAAAA  NNN   N  k     kk    XX    XX ",
+        " B     B A     A N   N N  k    kk     XX    XX ",
+        " BBBBBB  AAAAAA  N    NN  kkkkk        XXXXX  ",
+        "B     B A     A N    NN   kk   kk     XX    XX ",
+        " BBBBBB A     A N    NN   kk     kk   XX    XX "
+    };
+
+    int x = 17, y = 7; // Ajustar la posición inicial para centrar el texto si es necesario
+    for (const std::string& line : text) {
+        gotoxy(x, y++);
+        for (char c : line) {
+            std::cout << c;
+            Sleep(10); // Retraso de 20 milisegundos entre cada carácter
+        }
+    }
+
+    // Restablecer el color del texto a su valor predeterminado
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_RED | FOREGROUND_INTENSITY);
+
+    std::string text1 = "BIENVENIDO A  BankX";
+
+    int x1 = 30, y2 = 15; // Ajustar la posición inicial para centrar el texto si es necesario
+    for (char c : text1) {
+        gotoxy(x1++, y2);
+        std::cout << c;
+        Sleep(50); // Retraso de 50 milisegundos entre cada carácter
+    }
+
     _getch();
 }
+
 void operacionesPila(nodo* pila) {
     int operation;
     int id = 0;
     bool cola = false;
 
     do {
-        operation = submenu();
+        operation = submenu(cola);
 
         switch (operation) {
         case 1:
@@ -192,13 +241,17 @@ void operacionesListaSimple(NodoListaSimple*& cab, NodoListaSimple*& fin) {
             eliminarSimple(cab, fin, &id);
             break;
         case 4:
+            ResultadoBusquedaSimple(cab);
+            _getch();
+            break;
+        case 5:
             vaciarSimple(cab, fin, &id);
             break;
 
         default:
             cout << "Opción no válida." << endl;
         }
-    } while (operation != 5);
+    } while (operation != 6);
 
 };
 
@@ -222,13 +275,16 @@ void operacionesListaCircular(NodoListaCircular*& cab, NodoListaCircular*& fin) 
             eliminarCircular(cab, fin, &id);
             break;
         case 4:
+            ResultadoBusquedaCircular(cab);
+            _getch();
+            break;
+        case 5:
             vaciarCircular(cab, fin, &id);
             break;
-
         default:
             cout << "Opcion no valida." << endl;
         }
-    } while (operation != 5);
+    } while (operation != 6);
 
 };
 
@@ -252,13 +308,16 @@ void operacionesListaDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*&
             eliminarDoblemente(cab, fin, &id);
             break;
         case 4:
+            ResultadoBusquedaDoblemente(cab);
+            _getch();
+            break;
+        case 5:
             vaciarDoblemente(cab, fin, &id);
             break;
-
         default:
             cout << "Opcion no valida." << endl;
         }
-    } while (operation != 5);
+    } while (operation != 6);
 
 };
 
@@ -269,7 +328,7 @@ void operacionesCola(nodo* primero, nodo* ultimo) {
 
     do {
         LimpiarPatalla();
-        operation = submenu();
+        operation = submenu(cola);
 
         switch (operation) {
         case 1:
@@ -302,7 +361,7 @@ void operacionesABB(NodoABB *&Arbol) {
     int vert = 1;
     int eliminar;
     bool primera = true;
-
+    int constante = 20, aumentar = 7;
     do {
         LimpiarPatalla();
         operation = menuABB();
@@ -329,12 +388,14 @@ void operacionesABB(NodoABB *&Arbol) {
             ordenABB(Arbol);
             break;
         case 4:
-            resulBusqABB(Arbol);
+            resulBusqABB(Arbol, constante, aumentar);
             break;
+        case 6:
+            modificarABB(Arbol);
         default:
             cout << "Opción no válida." << endl;
         }
-    } while (operation != 6);
+    } while (operation != 7);
 };
 
 void operacioesAVL(NodoAVL*raiz) {;
@@ -369,101 +430,51 @@ void operacioesAVL(NodoAVL*raiz) {;
             
             break;
         case 4:
-            LimpiarPatalla();
-            cout << "Valor a buscar: \n";
-            cin >> valorb;
-            resultado = buscarAVL(raiz, valorb);
-            if (resultado != nullptr)
-                cout << "\nNodo " << resultado->cliente.cantidad << " encontrado en el árbol AVL." << endl;
-            else
-                cout << "\nNodo " << valorb << " no encontrado en el árbol AVL." << endl;
-            _getch();
+            busquedaAVl(raiz);
             break;
         case 5:
             ordenAVL(raiz);
             break;
+        case 6:
+            modificarAVL(raiz);
+            break;
         default:
-            cout << "Opción no válida." << endl;
+            break;
         }
-    } while (operation != 6);
+    } while (operation != 7);
 };
 
-int submenu() {
-    LimpiarPatalla();
+int submenu(bool escola) {
+    
     int opcionSubmenu = 1;
-    int maxOpcion = 6;
-    char tecla;
+    const int OPCIONES = 6;
+    int colorFondo;
+    if (escola) {
+        colorFondo = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_GREEN;
+    }
+    else {
+        colorFondo = FOREGROUND_BLUE | FOREGROUND_GREEN | BACKGROUND_RED;
+    }
+    int x = 22;
+    int y = 5;
+    string opciones[OPCIONES] = { "Agregar Cliente", "Mostrar Cliente", "Quitar Cliente", "Buscar Cliente", "Modificar cliente", "Atras"};
+    opcionSubmenu = mostrarMenuInteractivo(opciones, OPCIONES, x, y, colorFondo);
 
-
-    system("color F0");
-    do {
-        gotoxy(20, 2); cout << ("********************MENU******************");
-        gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Agregar cliente" : "Agregar cliente*");
-        gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> Mostrar cliente" : "mostrar cliente*");
-        gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> quitar cliente" : "quitar cliente*");
-        gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> Buscar cliente" : "Buscar cliente*");
-        gotoxy(20, 7); cout << ((opcionSubmenu == 5) ? "*-> modificar cliente" : "modificar cliente*");
-        gotoxy(20, 8); cout << ((opcionSubmenu == 6) ? "*-> atras" : " atras*");
-        gotoxy(20, 9); cout << ("*********************************************");
-
-        tecla = _getch();
-
-        switch (tecla) {
-        case 73: // Flecha arriba
-            opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
-            break;
-
-        case 80: // Flecha abajo
-            opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 : 1;
-            break;
-
-        case 13: // Enter
-            break;
-        }
-
-    } while (tecla != 13);
 
     return opcionSubmenu;
 }
 
 
-
-
 int Menu() {
+    const int OPCIONES = 8;
     int opcionMenuPrincipal = 1;
-    int maxOpciones = 8; // Incrementa el número de opciones
-    char tecla;
+    int colorFondo = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY; // Azul claro
 
-    do {
-        system("cls");
-        system("Color B5");
-        gotoxy(20, 2); cout << ("***********Menu Principal***********************");
-        gotoxy(20, 3); cout << ((opcionMenuPrincipal == 1) ? "*  -> Modulo de datos de apertura de cuentas (PILA)    " : "     Modulo de datos de  (PILA)    *");
-        gotoxy(20, 4); cout << ((opcionMenuPrincipal == 2) ? "*  -> Modulo de datos de creditos (COLA)    " : "     Modulo de datos de (COLA)    *");
-        gotoxy(20, 5); cout << ((opcionMenuPrincipal == 3) ? "*  -> Modulo de datos de transferecias (LISTA SIMPLE)     " : "     Modulo de datos de (LISTA SIMPLE) *"); // Añade la nueva opción
-        gotoxy(20, 6); cout << ((opcionMenuPrincipal == 4) ? "*  -> Modulo de datos de remesas (LISTA CIRCULAR)     " : "     Modulo de datos de (LISTA CIRCULAR) *"); // Añade la nueva opción
-        gotoxy(20, 7); cout << ((opcionMenuPrincipal == 5) ? "*  -> Modulo de datos de deposito (LISTA DOBLEMENTE)     " : "     Modulo de datos de (LISTA DOBLEMENTE ENLAZADA) *"); // Añade la nueva opción
-        gotoxy(20, 8); cout << ((opcionMenuPrincipal == 6) ? "*  -> Modulo de datos de retiros (ABB)     " : "     Modulo de datos de (ABB) *"); // Añade la nueva opción
-        gotoxy(20, 9); cout << ((opcionMenuPrincipal == 7) ? "*  -> Modulo de datos de Pagos de Luz (AVL)     " : "     Modulo de datos de (AVL) *"); // Añade la nueva opción
-        gotoxy(20, 10); cout << ((opcionMenuPrincipal == 8) ? "*  -> Salida                           " : "     Salida                      *"); // Cambia la posición de "Salida"
-        gotoxy(20, 11); cout << ("****************************************");
 
-        tecla = _getch();
-
-        switch (tecla) {
-        case 73: // Flecha arriba
-            opcionMenuPrincipal = (opcionMenuPrincipal > 1) ? opcionMenuPrincipal - 1 : maxOpciones;
-            break;
-
-        case 80: // Flecha abajo
-            opcionMenuPrincipal = (opcionMenuPrincipal < maxOpciones) ? opcionMenuPrincipal + 1 : 1;
-            break;
-
-        case 13: // Enter
-            break;
-        }
-
-    } while (tecla != 13);
+    int x = 22;
+    int y = 5;
+    string opciones[OPCIONES] = { "Apertura de Cuentas (PILAS)", "Prestamos (COLAS)", "Trasferencias (LISTA SIMPLE)", "Depositos (LISTA CIRCULAR)", "Remesas (LISTA DOBLE ENLAZADA)", "Retiros (ABB)", "Pagos de Luz (AVL)", "SALIR"};
+    opcionMenuPrincipal = mostrarMenuInteractivo(opciones, OPCIONES, x, y, colorFondo);
 
     return opcionMenuPrincipal;
 }
@@ -475,90 +486,34 @@ int menuModificar(bool esCola) {
 
     if (esCola) {
 
-
-        int maxOpciones = 9;
-        char tecla;
-        do {
-
-            system("color D0");
-            gotoxy(40, 2); cout << ("******************Modificar ************************** ************************");
-            gotoxy(40, 3); cout << ((opcionGeneral == 1) ? "* -> nombre " : " nombre                               *");
-            gotoxy(40, 4);  cout << ((opcionGeneral == 2) ? "* -> apellido " : " apellido                          *");
-            gotoxy(40, 5); cout << ((opcionGeneral == 3) ? "* -> DPI " : " DPI                                     *");
-            gotoxy(40, 6);  cout << ((opcionGeneral == 4) ? "* -> relefono " : " telefono                          *");
-            gotoxy(40, 7); cout << ((opcionGeneral == 5) ? "* -> edad " : " edad*");
-            gotoxy(40, 8); cout << ((opcionGeneral == 6) ? "* -> Numero de Nis " : " Numero de nis*");
-            gotoxy(40, 9); cout << ((opcionGeneral == 7) ? "* -> cantidad del prestamo " : " cantidad del prestamo  *");
-            gotoxy(40, 10); cout << ((opcionGeneral == 8) ? "* -> Ingreso de base " : " Ingreso de base             *");
-            gotoxy(40, 11);  cout << ((opcionGeneral == 9) ? "* ->  volver     " : " volver                              *") << endl;
-            gotoxy(40, 12); cout << ("********************************************************** ********************* ");
-
-
-            tecla = _getch();
-
-            switch (tecla) {
-            case 73: // Flecha arriba
-                opcionGeneral = (opcionGeneral > 1) ? opcionGeneral - 1 : maxOpciones;
-                break;
-
-            case 80: // Flecha abajo
-                opcionGeneral = (opcionGeneral < maxOpciones) ? opcionGeneral + 1 : 1;
-                break;
-
-            case 13: // Enter
-                break;
-            }
-
-
-        } while (tecla != 13);
+        system("color 2F");
+        const int OPCIONES = 9;
+        int colorFondo = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED; // Blanco sobre azul
+        int x = 45;
+        int y = 3;
+        string opciones[OPCIONES] = { "Modificar Nombre" , "Modificar Apellido ", "Modificar DPI ", "Modificar Telefono ", "Modificar Edad ", "Modificar Numero NIS", "Modificar Monto de Prestamo", "Modificar Ingreso Base", "Volver" };
+        opcionGeneral = mostrarMenuInteractivoSinBorrar(opciones, OPCIONES, x, y, colorFondo);
+        
 
         return opcionGeneral;
     }
 
 
     else {
-
-
-        int maxOpciones = 10;
-        char tecla;
-        do {
-            gotoxy(70, 2); cout << ("***Modificar*** ");
-            gotoxy(70, 3); cout << ((opcionGeneral == 1) ? "* -> nombre " : " nombre *");
-            gotoxy(70, 4); cout << ((opcionGeneral == 2) ? "* -> aperllido " : " apellido *");
-            gotoxy(70, 5); cout << ((opcionGeneral == 3) ? "* -> DPI " : " DPI *");
-            gotoxy(70, 6); cout << ((opcionGeneral == 4) ? "* -> telefono " : " telefono *");
-            gotoxy(70, 7); cout << ((opcionGeneral == 5) ? "* -> edad " : " edad*");
-            gotoxy(70, 8); cout << ((opcionGeneral == 6) ? "* -> Numero de Nis " : " Numero de nis *");;
-            gotoxy(70, 9); cout << ((opcionGeneral == 7) ? "* -> primer deposito " : " primer deposito *");
-            gotoxy(70, 10); cout << ((opcionGeneral == 8) ? "* -> sexo " : " sexo*");
-            gotoxy(70, 11); cout << ((opcionGeneral == 9) ? "* -> fecha de nacimiento " : " fecha de nacimiento*");
-            gotoxy(70, 12); cout << ((opcionGeneral == 10) ? "* -> volver " : " volver *  ");
-
-            tecla = _getch();
-
-            switch (tecla) {
-            case 73: // Flecha arriba
-                opcionGeneral = (opcionGeneral > 1) ? opcionGeneral - 1 : maxOpciones;
-                break;
-
-            case 80: // Flecha abajo
-                opcionGeneral = (opcionGeneral < maxOpciones) ? opcionGeneral + 1 : 1;
-                break;
-
-            case 13: // Enter
-                break;
-            }
-
-
-        } while (tecla != 13);
+        system("color 2F");
+        const int OPCIONES = 10;
+        int opcionMenuPrincipal = 1;
+        int colorFondo = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED; // Blanco sobre azul
+        int x = 45;
+        int y = 3;
+        string opciones[OPCIONES] = { "Modificar Nombre" , "Modificar Apellido ", "Modificar DPI ", "Modificar Telefono", "Modificar Edad ", "Modificar Numero NIS", "Modificar Primer Deposito ", "Modificar Sexo ", "Modificar Fecha Nacimiento: ", "Volver" };
+        opcionGeneral = mostrarMenuInteractivoSinBorrar(opciones, OPCIONES, x, y, colorFondo);
+       
 
         return opcionGeneral;
     }
 
 }
-
-
-
 
 void imprimirCliente(nodo*& nodo, bool esCola, int constante, int aumento, string encabezado) {
 
@@ -573,13 +528,13 @@ void imprimirCliente(nodo*& nodo, bool esCola, int constante, int aumento, strin
 
 
     if (esCola) {
-        gotoxy(constante, aumento++); cout << "Cantidad credito " << nodo->cliente.cantidad;
-        gotoxy(constante, aumento++); cout << "Ingreso base " << nodo->cliente.ingresoBase << endl;
+        gotoxy(constante, aumento++); cout << "Cantidad credito: " << nodo->cliente.cantidad;
+        gotoxy(constante, aumento++); cout << "Ingreso base: " << nodo->cliente.ingresoBase << endl;
     }
     else {
-        gotoxy(constante, aumento++); cout << "Cantidad primer deposito " << nodo->cliente.cantidad;
-        gotoxy(constante, aumento++); cout << "Sexo " << nodo->cliente.sexo;
-        gotoxy(constante, aumento++); cout << "Fecha nacimiento " << nodo->cliente.fechaNacimiento;
+        gotoxy(constante, aumento++); cout << "Primer deposito : " << nodo->cliente.cantidad;
+        gotoxy(constante, aumento++); cout << "Sexo: " << nodo->cliente.sexo;
+        gotoxy(constante, aumento++); cout << "Fecha nacimiento: " << nodo->cliente.fechaNacimiento;
     }
 
 };
@@ -651,8 +606,8 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
     else {
         if (esCola) {
             LimpiarPatalla();
-            constante = 20;
-            aumento = 2;
+            constante = 5;
+            aumento = 4;
             int optionUser;
             string nuevoValorString, encabezado = "Cliente: ";
             int nuevoValorInt;
@@ -666,6 +621,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                 {
                 case 1:
                     cin.ignore();
+                    system("color 2F");
                     cout << "Ingrese el nuevo nombre: ";
                     getline(cin, nuevoValorString);
                     nuevoValorString = convertiraMayuscula(nuevoValorString);
@@ -674,6 +630,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
                 case 2: // Apellido
                     cin.ignore();
+                    system("color 2F");
                     cout << "Ingresa el nuevo apellido: ";
                     getline(cin, nuevoValorString);
                     nuevoValorString = convertiraMayuscula(nuevoValorString);
@@ -683,6 +640,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
 
                 case 3: // DPI
                     cin.ignore();
+                    system("color 2F");
                     cout << "Ingresa el nuevo DPI: ";
                     getline(cin, nuevoValorString);
                     encontrado->cliente.DPI = nuevoValorString;
@@ -691,6 +649,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
 
                 case 4: // Teléfono
                     cin.ignore();
+                    system("color 2F");
                     cout << "Ingresa el nuevo teléfono: ";
                     getline(cin, nuevoValorString);
                     encontrado->cliente.Telefono = nuevoValorString;
@@ -698,24 +657,28 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
 
                 case 5: // Edad
+                    system("color 2F");
                     cout << "Ingresa la nueva edad: ";
                     cin >> encontrado->cliente.edad;
                     LimpiarPatalla();
                     break;
 
                 case 6: // Número NIS
+                    system("color 2F");
                     cout << "Ingresa el nuevo número NIS: ";
                     cin >> encontrado->cliente.numeroNis;
                     LimpiarPatalla();
                     break;
 
                 case 7: // Cantidad
+                    system("color 2F");
                     cout << "Ingresa la cantidad del prestamo: ";
                     cin >> encontrado->cliente.cantidad;
                     LimpiarPatalla();
                     break;
 
                 case 8: // Ingreso Base
+                    system("color 2F");
                     cout << "Ingresa el nuevo ingreso base: ";
                     cin >> encontrado->cliente.ingresoBase;
                     LimpiarPatalla();
@@ -727,8 +690,8 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
         }
         else {
 
-            constante = 15;
-            aumento = 6;
+            constante = 5;
+            aumento = 4;
             int optionUser;
             string nuevoValorString, encabezado = "Cliente: ";
 
@@ -737,12 +700,14 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
 
 
             do {
-                gotoxy(15, 5); cout << "Eliga el dato del cliente quiere cambiar";
+                LimpiarPatalla();
+                gotoxy(15, 1); cout << "Eliga el dato del cliente quiere cambiar";
                 imprimirCliente(encontrado, esCola, constante, aumento, encabezado);
                 optionUser = menuModificar(esCola);
 
                 switch (optionUser) {
                 case 1: // Nombre
+                    system("color 2F");
                     cin.ignore();
                     cout << "Ingresa el nuevo nombre: ";
                     getline(cin, nuevoValorString);
@@ -752,6 +717,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
 
                 case 2: // Apellido
+                    system("color 2F");
                     cin.ignore();
                     cout << "Ingresa el nuevo apellido: ";
                     getline(cin, nuevoValorString);
@@ -761,6 +727,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
 
                 case 3: // DPI
+                    system("color 2F");
                     cin.ignore();
                     cout << "Ingresa el nuevo DPI: ";
                     getline(cin, nuevoValorString);
@@ -770,6 +737,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
 
                 case 4: // Teléfono
                     cin.ignore();
+                    system("color 2F");
                     cout << "Ingresa el nuevo telefono: ";
                     getline(cin, nuevoValorString);
                     encontrado->cliente.Telefono = nuevoValorString;
@@ -777,6 +745,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
 
                 case 5: // Edad
+                    system("color 2F");
                     cout << "Ingresa la nueva edad: ";
                     cin >> nuevoValorInt;
                     encontrado->cliente.edad = nuevoValorInt;
@@ -784,6 +753,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
 
                 case 6: // NIS
+                    system("color 2F");
                     cout << "Ingresa el nuevo numero NIS: ";
                     cin >> nuevoValorInt;
                     encontrado->cliente.numeroNis = nuevoValorInt;
@@ -791,6 +761,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
 
                 case 7: // Primer deposito
+                    system("color 2F");
                     cout << "Ingresa el deposito de apertura: ";
                     cin >> nuevoValorInt;
                     encontrado->cliente.cantidad = nuevoValorInt;
@@ -798,6 +769,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
 
                 case 8: //  sexo
+                    system("color 2F");
                     cout << "Ingresa el nuevo sexo (M/F): ";
                     cin >> nuevoValorChar;
                     encontrado->cliente.sexo = nuevoValorChar;
@@ -805,6 +777,7 @@ void ModificarDato(nodo*& inicio, int* id, bool esCola) {
                     break;
 
                 case 9: // Fecha nacimiento
+                    system("color 2F");
                     cin.ignore();
                     cout << "Ingresa la nueva fecha de nacimiento: ";
                     getline(cin, nuevoValorString);
@@ -860,17 +833,15 @@ void pushCola(nodo*& primero, nodo*& ultimo, int* id) { //esto es para el presta
     (*id)++;
     string nombre, apellido, DPI, telefono, fechadenacimiento;
     int edad, numeroNis, cantidad, ingresoBase;
-    int constante = 20, aumento = 4;
-
-    gotoxy(constante, aumento++); cout << "Ingrese el nombre de cliente";
-    cin.ignore();
-    gotoxy(constante, aumento++); getline(cin, nombre);
-
-    gotoxy(constante, aumento++); cout << "Ingrese el apellido de cliente";
-    gotoxy(constante, aumento++); getline(cin, apellido);
+    int constante = 20, aumento =3;
 
     gotoxy(constante, aumento++); cout << "Ingrese DPI de cliente";
     gotoxy(constante, aumento++); cin >> DPI;
+    gotoxy(constante, aumento++); cout << "Ingrese el nombre de cliente";
+    cin.ignore();
+    gotoxy(constante, aumento++); getline(cin, nombre);
+    gotoxy(constante, aumento++); cout << "Ingrese el apellido de cliente";
+    gotoxy(constante, aumento++); getline(cin, apellido);
     gotoxy(constante, aumento++); cout << "Ingrese telefono del cliente";
     gotoxy(constante, aumento++); cin >> telefono;
 
@@ -934,6 +905,10 @@ void push(nodo*& pila, int* id) { //esto es para la apertura
     string nombre, apellido, DPI, Telefono, fechaNacimiento;
     char Sexo;
     int edad, numeroNis, cantidad;
+
+    gotoxy(constante, aumento++); cout << "Ingrese el DPI de cliente: \n";
+    gotoxy(constante, aumento); cin >> DPI;
+
     gotoxy(constante, aumento++); cout << "Ingrese el nombre de cliente \n";
     cin.ignore();
     gotoxy(constante, aumento++); getline(cin, nombre);
@@ -941,8 +916,7 @@ void push(nodo*& pila, int* id) { //esto es para la apertura
     gotoxy(constante, aumento++); cout << "Ingrese el apellido de cliente \n";
     gotoxy(constante, aumento++); getline(cin, apellido);
 
-    gotoxy(constante, aumento++); cout << "Ingrese el DPI de cliente \n";
-    gotoxy(constante, aumento++); cin >> DPI;
+    
 
     gotoxy(constante, aumento++); cout << "Ingrese el numero de telefono de cliente \n";
     gotoxy(constante, aumento++); cin >> Telefono;

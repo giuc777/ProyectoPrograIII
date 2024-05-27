@@ -2,45 +2,19 @@
 #include "Nodos.h"
 #ifndef FUNCIONESLISTAS_H
 #define FUNCIONESLISTAS_H
-
-
+#include"menus.h"
 
 
 
 int menuListas() {
-    LimpiarPatalla();
     int opcionSubmenu = 1;
-    int maxOpcion = 5;
-    char tecla;
+    const int OPCIONES = 6;
 
-
-    system("color F0");
-    do {
-        gotoxy(20, 2); cout << ("********************MENU******************");
-        gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Nueva trasnferencia" : " Nueva trasnferencia*  ");
-        gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> Mostrar trasnferencias" : " Mostrar trasnferencias*  ");
-        gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> Quitar trasnferencias" : " Quitar trasnferencias*  ");
-        gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> Vaciar registro" : " Vaciar registro*  ");
-        gotoxy(20, 7); cout << ((opcionSubmenu == 5) ? "*-> atras" : " atras*  ");
-        gotoxy(20, 8); cout << ("*********************************************");
-
-        tecla = _getch();
-
-        switch (tecla) {
-        case 73: // Flecha arriba
-            opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
-            break;
-
-        case 80: // Flecha abajo
-            opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 : 1;
-            break;
-
-        case 13: // Enter
-            break;
-        }
-
-    } while (tecla != 13);
-
+    int x = 22;
+    int y = 5;
+    int colorS = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | BACKGROUND_BLUE | BACKGROUND_INTENSITY;
+    string opciones[OPCIONES] = { "Nueva transferencia", "Mostrar Transferencias", "Quitar trasnferencias","Buscar Transferencia", "Vaciar registro", "atras"};
+    opcionSubmenu = mostrarMenuInteractivo(opciones, OPCIONES, x, y, colorS);
     return opcionSubmenu;
 };
 
@@ -60,8 +34,7 @@ void insertarSimple(NodoListaSimple*& cab, NodoListaSimple*& fin, int* id) {
     gotoxy(constante, aumentar++);cin >> cuenta1;
     gotoxy(constante, aumentar++);cout << "Ingrese la cuenta a transferir: ";
     gotoxy(constante, aumentar++);cin >> cuenta2;
-    gotoxy(constante, aumentar++);cout << "Ingrese la fecha: ";
-    gotoxy(constante, aumentar++);cin >> fecha;
+    fecha = obtenerFechaActual();
 
     NodoListaSimple* nuevo = new NodoListaSimple;
     nuevo->Cliente.idTrans = *id;
@@ -150,8 +123,8 @@ void MostrarLista(NodoListaSimple*& cab, NodoListaSimple*& fin, int* id) {
         gotoxy(constante, aumentar++);cout << "Cantidad : " << actual->Cliente.cantidad;
         gotoxy(constante, aumentar++);cout << "Cuenta retirada : " << actual->Cliente.cuenta1;
         gotoxy(constante, aumentar++);cout << "Cuenta acreditada : " << actual->Cliente.cuenta2;
-        gotoxy(constante, aumentar++);cout << "DPI cliente " << actual->Cliente.DPI;
-        gotoxy(constante, aumentar++);cout << "Fecha " << actual->Cliente.fecha;
+        gotoxy(constante, aumentar++);cout << "DPI cliente: " << actual->Cliente.DPI;
+        gotoxy(constante, aumentar++);cout << "Fecha: " << actual->Cliente.fecha;
         gotoxy(constante, aumentar++); cout << "Siguiente ->" << actual->sig;
         gotoxy(constante, aumentar++); cout << "------------------------------";
         aumentar = aumentar + 1;
@@ -162,38 +135,14 @@ void MostrarLista(NodoListaSimple*& cab, NodoListaSimple*& fin, int* id) {
 
 //Listas circular
 int menuListaCircular() {
-    LimpiarPatalla();
     int opcionSubmenu = 1;
-    int maxOpcion = 5;
-    char tecla;
+    const int OPCIONES = 6;
 
-
-    system("color F0");
-    do {
-        gotoxy(20, 2); cout << ("********************MENU******************");
-        gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Nueva Remesa" : "  Nueva Remesa*  ");
-        gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> Mostrar Remesas" : "  Mostrar Remesas*  ");
-        gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> Quitar Remesas" : "  Quitar Remesas*  ");
-        gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> Vaciar registro" : "  Vaciar registro*  ");
-        gotoxy(20, 7); cout << ((opcionSubmenu == 5) ? "*-> atras" : " atras*  ");
-        gotoxy(20, 8); cout << ("*********************************************");
-
-        tecla = _getch();
-
-        switch (tecla) {
-        case 73: // Flecha arriba
-            opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
-            break;
-
-        case 80: // Flecha abajo
-            opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 : 1;
-            break;
-
-        case 13: // Enter
-            break;
-        }
-
-    } while (tecla != 13);
+    int x = 22;
+    int y = 5;
+    int color = FOREGROUND_RED | BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE | BACKGROUND_INTENSITY;
+    string opciones[OPCIONES] = { "Nueva Remesa", "Mostrar remesa", "Quitar Remesa","Buscar Remesa", "Vaciar Registro", "Atras"};
+    opcionSubmenu = mostrarMenuInteractivo(opciones, OPCIONES, x, y, color);
 
     return opcionSubmenu;
 };
@@ -216,8 +165,7 @@ void insertarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id)
     gotoxy(constante, aumentar++);getline(cin, apellido);
     gotoxy(constante, aumentar++);cout << "Ingrese el pais de origen: ";
     gotoxy(constante, aumentar++);cin >> pais;
-    gotoxy(constante, aumentar++);cout << "Ingrese la fecha: ";
-    gotoxy(constante, aumentar++);cin >> fecha;
+    fecha = obtenerFechaActual();
 
     NodoListaCircular* nuevoNodo = new NodoListaCircular;
     nuevoNodo->Cliente.nombre = nombre;
@@ -326,9 +274,9 @@ void MostrarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id) 
             gotoxy(constante, aumentar++);cout << "Cantidad: " << actual->Cliente.cantidad;
             gotoxy(constante, aumentar++);cout << "Nombre del cliente: " << actual->Cliente.nombre;
             gotoxy(constante, aumentar++);cout << "Apellido del cliente: " << actual->Cliente.apellido;
-            gotoxy(constante, aumentar++);cout << "DPI cliente " << actual->Cliente.DPI;
-            gotoxy(constante, aumentar++);cout << "Fecha " << actual->Cliente.fecha;
-            gotoxy(constante, aumentar++);cout << "Pais origen remesa " << actual->Cliente.paisOrigen;
+            gotoxy(constante, aumentar++);cout << "DPI cliente: " << actual->Cliente.DPI;
+            gotoxy(constante, aumentar++);cout << "Fecha: " << actual->Cliente.fecha;
+            gotoxy(constante, aumentar++);cout << "Pais origen remesa: " << actual->Cliente.paisOrigen;
             gotoxy(constante, aumentar++); cout << "Siguiente ->" << actual->sig;
             gotoxy(constante, aumentar++); cout << "------------------------------";
             aumentar = aumentar + 1;
@@ -343,38 +291,14 @@ void MostrarCircular(NodoListaCircular*& cab, NodoListaCircular*& fin, int* id) 
 
 
 int menuListaDoblemente() {
-    LimpiarPatalla();
     int opcionSubmenu = 1;
-    int maxOpcion = 5;
-    char tecla;
+    const int OPCIONES = 6;
 
-
-    system("color F0");
-    do {
-        gotoxy(20, 2); cout << ("********************MENU******************");
-        gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Nuevo Deposito" : "  Nuevo Deposito*  ");
-        gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> Mostrar Depositos" : "  Mostrar Depositos*  ");
-        gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> Quitar Deposito" : "  Quitar Deposito*  ");
-        gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> Vaciar registro" : "  Vaciar registro*  ");
-        gotoxy(20, 7); cout << ((opcionSubmenu == 5) ? "*-> atras" : " atras*  ");
-        gotoxy(20, 8); cout << ("*********************************************");
-
-        tecla = _getch();
-
-        switch (tecla) {
-        case 73: // Flecha arriba
-            opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
-            break;
-
-        case 80: // Flecha abajo
-            opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 : 1;
-            break;
-
-        case 13: // Enter
-            break;
-        }
-
-    } while (tecla != 13);
+    int x = 22;
+    int y = 5;
+    int color = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | BACKGROUND_BLUE;
+    string opciones[OPCIONES] = { "Nuevo Depoito", "Mostrar Depositos", "Quitar Deposito", "Buscar Deposito","Vaciar registro","atras"};
+    opcionSubmenu = mostrarMenuInteractivo(opciones, OPCIONES, x, y, color);
 
     return opcionSubmenu;
 };
@@ -393,8 +317,7 @@ void insertarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, in
     gotoxy(constante, aumentar++);getline(cin, nombre);
     gotoxy(constante, aumentar++);cout << "Ingrese el apellido del cliente: ";
     gotoxy(constante, aumentar++); getline(cin, apellido);
-    gotoxy(constante, aumentar++);cout << "Ingrese la fecha: ";
-    gotoxy(constante, aumentar++);cin >> fecha;
+    fecha = obtenerFechaActual();
 
     NodoListaDoblemente* nuevoNodo = new NodoListaDoblemente;
     nuevoNodo->Cliente.nombre = nombre;
@@ -501,8 +424,8 @@ void MostrarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int
             gotoxy(constante, aumentar++);cout << "Cantidad: " << actual->Cliente.cant;
             gotoxy(constante, aumentar++);cout << "Nombre del cliente: " << actual->Cliente.nombre;
             gotoxy(constante, aumentar++);cout << "Apellido del cliente: " << actual->Cliente.apellido;
-            gotoxy(constante, aumentar++);cout << "DPI cliente " << actual->Cliente.dpi;
-            gotoxy(constante, aumentar++);cout << "Fecha " << actual->Cliente.fecha;
+            gotoxy(constante, aumentar++);cout << "DPI cliente: " << actual->Cliente.dpi;
+            gotoxy(constante, aumentar++);cout << "Fecha: " << actual->Cliente.fecha;
             gotoxy(constante, aumentar++);cout << "Anterior:  " << &actual->ant;
             gotoxy(constante, aumentar++); cout << "Siguiente ->" << actual->sig;
             gotoxy(constante, aumentar++); cout << "------------------------------";
@@ -517,9 +440,120 @@ void MostrarDoblemente(NodoListaDoblemente*& cab, NodoListaDoblemente*& fin, int
 };
 
 
+//Recorridos
+NodoListaSimple* buscarEnListaSimple(NodoListaSimple* inicio, int id) {
+    NodoListaSimple* actual = inicio;
+    while (actual != nullptr) {
+        if (actual->Cliente.idTrans == id) {
+            return actual; // Se encontró el nodo
+        }
+        actual = actual->sig;
+    }
+    return nullptr; // No se encontró el nodo
+}
+
+// Función para buscar un nodo específico en una lista circular
+NodoListaCircular* buscarEnListaCircular(NodoListaCircular* inicio, int id) {
+    if (inicio == nullptr) return nullptr;
+
+    NodoListaCircular* actual = inicio;
+    do {
+        if (actual->Cliente.idRemesa == id) {
+            return actual; // Se encontró el nodo
+        }
+        actual = actual->sig;
+    } while (actual != inicio);
+
+    return nullptr; // No se encontró el nodo
+}
+
+// Función para buscar un nodo específico en una lista doblemente enlazada
+NodoListaDoblemente* buscarEnListaDoblemente(NodoListaDoblemente* inicio, int id) {
+    NodoListaDoblemente* actual = inicio;
+    while (actual != nullptr) {
+        if (actual->Cliente.idDeposito == id) {
+            return actual; // Se encontró el nodo
+        }
+        actual = actual->sig;
+    }
+    return nullptr; // No se encontró el nodo
+}
 
 
+void ResultadoBusquedaSimple(NodoListaSimple* inicio) {
+    LimpiarPatalla();
+    int id;
+    gotoxy(20, 2);cout << "Ingrese el id del usuario: ";
+    gotoxy(20, 3);cin >> id;
+    NodoListaSimple* busqueda = buscarEnListaSimple(inicio, id);
+    if (busqueda != nullptr) {
+        
+        gotoxy(20, 5);cout << "Se encontro al cliente con " << id;
+        int constante = 20, aumentar = 7;
+        gotoxy(constante, aumentar++); cout << "------------------------------";
+        gotoxy(constante, aumentar++);cout << "Numero de transferencia: " << busqueda->Cliente.idTrans;
+        gotoxy(constante, aumentar++);cout << "Cantidad : " << busqueda->Cliente.cantidad;
+        gotoxy(constante, aumentar++);cout << "Cuenta retirada : " << busqueda->Cliente.cuenta1;
+        gotoxy(constante, aumentar++);cout << "Cuenta acreditada : " << busqueda->Cliente.cuenta2;
+        gotoxy(constante, aumentar++);cout << "DPI cliente " << busqueda->Cliente.DPI;
+        gotoxy(constante, aumentar++);cout << "Fecha " << busqueda->Cliente.fecha;
+        gotoxy(constante, aumentar++); cout << "------------------------------";
+    }
+    else {
+        LimpiarPatalla();
+        cout << "No hay resultados del id" << id;
+    }
+}
+
+void ResultadoBusquedaCircular(NodoListaCircular*inicio) {
+    LimpiarPatalla();
+    int id;
+    gotoxy(20, 2);cout << "Ingrese el id del usuario: ";
+    gotoxy(20, 3);cin >> id;
+    NodoListaCircular * busqueda = buscarEnListaCircular(inicio, id);
+    if (busqueda != nullptr) {
+        int constante = 20, aumentar = 7;
+        gotoxy(20, 5);cout << "Se encontro al cliente con " << id;
+        gotoxy(constante, aumentar++); cout << "------------------------------";
+        gotoxy(constante, aumentar++);cout << "Numero de remesa: " << busqueda->Cliente.idRemesa;
+        gotoxy(constante, aumentar++);cout << "Cantidad: " << busqueda->Cliente.cantidad;
+        gotoxy(constante, aumentar++);cout << "Nombre del cliente: " << busqueda->Cliente.nombre;
+        gotoxy(constante, aumentar++);cout << "Apellido del cliente: " << busqueda->Cliente.apellido;
+        gotoxy(constante, aumentar++);cout << "DPI cliente: " << busqueda->Cliente.DPI;
+        gotoxy(constante, aumentar++);cout << "Fecha: " << busqueda->Cliente.fecha;
+        gotoxy(constante, aumentar++);cout << "Pais origen remesa: " << busqueda->Cliente.paisOrigen;
+        gotoxy(constante, aumentar++); cout << "------------------------------";
+    }
+    else {
+        LimpiarPatalla();
+        cout << "No hay resultados del id" << id;
+    }
+
+}
+
+void ResultadoBusquedaDoblemente(NodoListaDoblemente*inicio) {
+    LimpiarPatalla();
+    int id;
+    gotoxy(20, 2);cout << "Ingrese el id del usuario: ";
+    gotoxy(20, 3);cin >> id;
+    NodoListaDoblemente* busqueda = buscarEnListaDoblemente(inicio, id);
+    if (busqueda != nullptr) {
+        int constante = 20, aumentar = 7;
+        gotoxy(20, 5);cout << "Se encontro al cliente con " << id;
+        gotoxy(constante, aumentar++); cout << "------------------------------";
+        gotoxy(constante, aumentar++);cout << "Numero de deposito: " << busqueda->Cliente.idDeposito;
+        gotoxy(constante, aumentar++);cout << "Cantidad: " << busqueda->Cliente.cant;
+        gotoxy(constante, aumentar++);cout << "Nombre del cliente: " << busqueda->Cliente.nombre;
+        gotoxy(constante, aumentar++);cout << "Apellido del cliente: " << busqueda->Cliente.apellido;
+        gotoxy(constante, aumentar++);cout << "DPI cliente: " << busqueda->Cliente.dpi;
+        gotoxy(constante, aumentar++);cout << "Fecha: " << busqueda->Cliente.fecha;
+        gotoxy(constante, aumentar++); cout << "------------------------------";
+    }
+    else {
+        LimpiarPatalla();
+        cout << "No hay resultados del id" << id;
+    }
 
 
-
+}
 #endif

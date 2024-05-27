@@ -1,43 +1,20 @@
 #pragma once
 #include "Nodos.h"
 #include "template.h"
+#include"menus.h"
 #ifndef FUNCIONESARBOLES_H
 #define FUNCIONESARBOLES_H
 
+
 int menuABB() {
-    LimpiarPatalla();
     int opcionSubmenu = 1;
-    int maxOpcion = 6;
-    char tecla;
+    const int OPCIONES = 7;
 
-
-    system("color F0");
-    do {
-        gotoxy(20, 2); cout << ("********************MENU******************");
-        gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Nuevo Retiro" : "  Nueva Retiro*  ");
-        gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> Mostrar Retiros" : "  Mostrar Retiros*  ");
-        gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> Quitar Retiro" : "  Quitar Retiro*  ");
-        gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> Buscar Retiro" : "  Buscar Retiro*  ");
-        gotoxy(20, 7); cout << ((opcionSubmenu == 5) ? "*-> Recorrer" : "  Recorrer*  ");
-        gotoxy(20, 8); cout << ((opcionSubmenu == 6) ? "*-> atras" : " atras*  ");
-        gotoxy(20, 9); cout << ("*********************************************");
-
-        tecla = _getch();
-
-        switch (tecla) {
-        case 73: // Flecha arriba
-            opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
-            break;
-
-        case 80: // Flecha abajo
-            opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 : 1;
-            break;
-
-        case 13: // Enter
-            break;
-        }
-
-    } while (tecla != 13);
+    int x = 22;
+    int y = 5;
+    int colorS = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY | BACKGROUND_RED | BACKGROUND_BLUE;
+    string opciones[OPCIONES] = { "Nuevo retiro","Mostrar retiros","Quitar retiros","Buscar retiro","Recorrer","Modificar retiro", "atras"};
+    opcionSubmenu = mostrarMenuInteractivo(opciones, OPCIONES, x, y, colorS);
 
     return opcionSubmenu;
 };
@@ -94,8 +71,7 @@ void AgregarNodoABB(NodoABB*& arbol) {
     gotoxy(constante, aumentar++);getline(cin, nombre);
     gotoxy(constante, aumentar++);cout << "Ingrese el apellido del cliente: ";
     gotoxy(constante, aumentar++);getline(cin, apellido);
-    gotoxy(constante, aumentar++);cout << "Ingrese la fecha: ";
-    gotoxy(constante, aumentar++);cin >> fecha;
+    fecha = obtenerFechaActual();
     insertarABB(arbol, cantidad, nombre, cuenta, fecha, dpi, apellido, NULL);
     gotoxy(constante, aumentar++);cout << "Se completo el retiro de la catidad de " << cantidad;
     _getch();
@@ -178,24 +154,24 @@ bool busquedaABB(NodoABB* arbol, int cant, NodoABB** aux) {
     }
 }; 
 
-void resulBusqABB(NodoABB* arbol) {
+void resulBusqABB(NodoABB* arbol, int constante, int aumentar) {
     LimpiarPatalla();
     int buscar;
-    gotoxy(20, 2);cout << "Ingrese la cantidad que busca: ";
+    gotoxy(20, 2);cout << "Ingrese la cantidad a buscar: ";
     gotoxy(20, 3);cin>>buscar;
 
     NodoABB* aux = NULL;
    
     if (busquedaABB(arbol, buscar, &aux)) {
         gotoxy(20, 5);cout<<"Se encontro la cantidad de "<<buscar;
-        int constante = 20, aumentar = 7;
+        
         gotoxy(constante, aumentar++);cout << "Detalles: ";
         gotoxy(constante, aumentar++);cout << "Nombre: " <<aux->Cliente.nombre;
         gotoxy(constante, aumentar++);cout << "Apellido: " << aux->Cliente.apellido;
         gotoxy(constante, aumentar++);cout << "DPI: " << aux->Cliente.DPI;
         gotoxy(constante, aumentar++);cout << "Retirado: " << aux->Cliente.cantidad;
         gotoxy(constante, aumentar++);cout << "cuenta: " << aux->Cliente.cuenta;
-
+        gotoxy(constante, aumentar++);cout << "Fecha: " << aux->Cliente.fecha;
     }
     else {
         gotoxy(20, 5);cout << "No se encontro " << buscar;
@@ -335,7 +311,130 @@ void eliminarABB(NodoABB* arbol, int dato) {
     }
 }
 
+int menuModificarABB() {
+    int optionGeneral = 1;
+    system("color 2F");
+    const int OPCIONES = 6;
+    int colorFondo = BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED; // Blanco sobre azul
+    int x = 45;
+    int y = 3;
+    string opciones[OPCIONES] = { "Modificar Nombre" , "Modificar Apellido ", "Modificar DPI ", "Modificar Cantidad Retiro ", "Modificar Cuenta ", "Volver" };
+    optionGeneral = mostrarMenuInteractivoSinBorrar(opciones, OPCIONES, x, y, colorFondo);
+    return optionGeneral;
+}
 
+NodoABB* ReestructurarABB(NodoABB* arbol, int cantidad, string nombre, string cuenta, string fecha, string dpi, string apellido, NodoABB* padre, int cantidadEliminar) {
+    insertarABB(arbol, cantidad, nombre, cuenta, fecha, dpi, apellido, NULL);
+    eliminarABB(arbol, cantidadEliminar);
+    NodoABB* nuevo_nodo = NULL;
+    busquedaABB(arbol, cantidad, &nuevo_nodo);
+    return nuevo_nodo;
+};
+
+void modificarABB(NodoABB* arbol) {
+    LimpiarPatalla();
+    int constante = 5;
+    int aumentar = 4;
+    int optionUser;
+    string nuevoValorString;
+    int nuevoValorInt;
+    int buscar;
+    gotoxy(20, 2);cout << "Ingrese la cantidad a buscar: ";
+    gotoxy(20, 3);cin >> buscar;
+
+    NodoABB* aux = NULL;
+
+    if (busquedaABB(arbol, buscar, &aux)) {
+        
+        NodoABB* encontrado = aux;
+        
+
+        do {
+            LimpiarPatalla();
+            gotoxy(20, 2);cout << "Cliente a modificar:  " << encontrado->Cliente.DPI;
+
+            gotoxy(constante, aumentar++);cout << "Detalles";
+            gotoxy(constante, aumentar++);cout << "Nombre: " << encontrado->Cliente.nombre;
+            gotoxy(constante, aumentar++);cout << "Apellido: " << encontrado->Cliente.apellido;
+            gotoxy(constante, aumentar++);cout << "DPI: " << encontrado->Cliente.DPI;
+            gotoxy(constante, aumentar++);cout << "Retirado: " << encontrado->Cliente.cantidad;
+            gotoxy(constante, aumentar++);cout << "cuenta: " << encontrado->Cliente.cuenta;
+            gotoxy(constante, aumentar++);cout << "cuenta: " << encontrado->Cliente.fecha;
+
+            optionUser = menuModificarABB();
+
+            switch (optionUser)
+            {
+            case 1:
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingrese el nuevo nombre: ";
+                getline(cin, nuevoValorString);
+                encontrado->Cliente.nombre = nuevoValorString;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+            case 2: // Apellido
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingresa el nuevo apellido: ";
+                getline(cin, nuevoValorString);
+                encontrado->Cliente.apellido = nuevoValorString;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+
+            case 3: // DPI
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingresa el nuevo DPI: ";
+                getline(cin, nuevoValorString);
+                encontrado->Cliente.DPI = nuevoValorString;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+
+            case 4: // Teléfono
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingresa el monto del retiro: ";
+                cin>>nuevoValorInt;
+                encontrado = ReestructurarABB(arbol, nuevoValorInt, aux->Cliente.nombre, aux->Cliente.cuenta, aux->Cliente.fecha, aux->Cliente.DPI, aux->Cliente.apellido, NULL, buscar);;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+
+            case 5: // Edad
+                cin.ignore();
+                system("color 2F");
+                gotoxy(constante, 12);
+                cout << "Ingresa la cuenta afectada: ";
+                getline(cin, nuevoValorString);
+                encontrado->Cliente.cuenta = nuevoValorString;
+                LimpiarPatalla();
+                aumentar = 4;
+                break;
+
+            default:
+                break;
+            }
+        } while (optionUser != 6);
+
+
+    }
+    else {
+        gotoxy(20, 5);cout << "No se encontro " << buscar;
+    }
+
+
+    
+    
+
+}
 #endif
 
 //struct ClientesRetiro {

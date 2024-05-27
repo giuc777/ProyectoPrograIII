@@ -1,3 +1,4 @@
+
 #ifndef _template_H
 #define _template_H
 
@@ -11,6 +12,7 @@
 #include <string.h>
 #include <cctype>
 #include <string>
+
 using namespace std;
 
 
@@ -30,41 +32,36 @@ void haciaAbajo(int constante, int* aumento) {
     return gotoxy(constante, *aumento);
 }
 
-int menuOrden() {
-    LimpiarPatalla();
-    int opcionSubmenu = 1;
-    int maxOpcion = 4;
-    char tecla;
+string obtenerFechaActual() {
+    // Obtener el tiempo actual
+    time_t tiempoActual = time(0);
 
+    // Convertir a tiempo local de manera segura
+    tm ahora;
+    localtime_s(&ahora, &tiempoActual);
 
-    system("color F0");
-    do {
-        gotoxy(20, 2); cout << ("********************MENU******************");
-        gotoxy(20, 3); cout << ((opcionSubmenu == 1) ? "*-> Pre-orden" : "  Pre-orden*  ");
-        gotoxy(20, 4); cout << ((opcionSubmenu == 2) ? "*-> In-orden" : "  In-orden*  ");
-        gotoxy(20, 5); cout << ((opcionSubmenu == 3) ? "*-> Post-orden" : "  Post - orden *  ");
-        gotoxy(20, 6); cout << ((opcionSubmenu == 4) ? "*-> atras" : " atras*  ");
-        gotoxy(20, 7); cout << ("*********************************************");
+    // Crear un buffer para la fecha formateada
+    char buffer[11];
+    strftime(buffer, sizeof(buffer), "%d/%m/%Y", &ahora);
 
-        tecla = _getch();
+    return string(buffer);
+}
 
-        switch (tecla) {
-        case 73: // Flecha arriba
-            opcionSubmenu = (opcionSubmenu > 1) ? opcionSubmenu - 1 : maxOpcion;
-            break;
+// Función para dibujar un cuadro en la consola
+void dibujarCuadro(int x, int y, int ancho, int alto) {
+    gotoxy(x, y); std::cout << char(218);
+    for (int i = 1; i < ancho; i++) std::cout << char(196);
+    std::cout << char(191);
 
-        case 80: // Flecha abajo
-            opcionSubmenu = (opcionSubmenu < maxOpcion) ? opcionSubmenu + 1 : 1;
-            break;
+    for (int i = 1; i < alto; i++) {
+        gotoxy(x, y + i); std::cout << char(179);
+        gotoxy(x + ancho, y + i); std::cout << char(179);
+    }
 
-        case 13: // Enter
-            break;
-        }
-
-    } while (tecla != 13);
-
-    return opcionSubmenu;
-};
+    gotoxy(x, y + alto); std::cout << char(192);
+    for (int i = 1; i < ancho; i++) std::cout << char(196);
+    std::cout << char(217);
+}
 
 
 #endif // !1
